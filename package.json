@@ -2,7 +2,7 @@
   "name": "composite-formatter",
   "displayName": "Composite Formatter",
   "description": "Formatter that Runs Multiple Formatters.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icon": "image/icon.png",
   "engines": {
     "vscode": "^1.71.0"
@@ -13,7 +13,8 @@
   "keywords": [
     "formatter",
     "multiple",
-    "composite"
+    "composite",
+    "formatters"
   ],
   "bugs": {
     "url": "https://github.com/34j/vscode-composite-formatter/issues"
