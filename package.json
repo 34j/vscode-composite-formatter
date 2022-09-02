@@ -1,0 +1,82 @@
+{
+  "name": "composite-formatter",
+  "displayName": "Composite Formatter",
+  "description": "Formatter that Runs Multiple Formatters.",
+  "version": "0.0.1",
+  "icon": "image/icon.png",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "formatter",
+    "multiple",
+    "composite"
+  ],
+  "bugs": {
+    "url": "https://github.com/34j/vscode-composite-formatter/issues"
+  },
+  "publisher": "mikoz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/34j/vscode-composite-formatter.git"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "composite-formatter.refresh",
+        "title": "Composite Formatter: Refresh Formatters"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Composite Formatter",
+        "properties": {
+          "composite-formatter.formatterSettings": {
+            "type": "array",
+            "default": [
+              {
+                "name": "My Python Composite Formatter",
+                "selector": {
+                  "language": "python"
+                },
+                "formatters": [
+                  "ms-python.python"
+                ]
+              }
+            ],
+            "markdownDescription": "Call `Composite Formatter: Refresh Formatters` from Command Palette after setting this value.\nExample:\n\n```json\n\"composite-formatter.formatterSettings\": [\n  {\n    \"name\": \"CompositeFormatter1\",\n    \"selector\": {\n        \"language\": \"python\"\n    },\n    \"formatters\": [\n        \"ms-python.python\"\n    ]\n  }\n],\n```\n\nTo be pricise,\n\n```typescript\ntype FormatterSetting = {\n    name: string;//This value will no be used, just for memo.\n    selector: vscode.DocumentSelector;//Document Selector, like {'language'='python'}\n    formatters: string[];//Array of formatter ids, like ['ms-python.python']\n};\n\ndeclare module 'vscode' {\n    export type DocumentSelector = DocumentFilter | string | Array<DocumentFilter | string>;\n    export interface DocumentFilter {\n        language?: string;//A language id, like `typescript`.\n        scheme?: string;//A Uri [scheme](#Uri.scheme), like `file` or `untitled`.\n        pattern?: GlobPattern;//A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder.\n    }\n}\n```",
+            "scope": "resource"
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.71.0",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4",
+    "@vscode/test-electron": "^2.1.5"
+  }
+}
