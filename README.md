@@ -16,41 +16,10 @@ VSCode Formatter that Runs Multiple Formatters.
 
 This extension contributes the following settings:
 
-- `composite-formatter.formatterSetting`: `FormatterSetting[]`
-Example:
-
-```json
-"composite-formatter.formatterSettings": [
-  {
-    "name": "CompositeFormatter1",
-    "selector": {
-        "language": "python"
-    },
-    "formatters": [
-        "ms-python.python"
-    ]
-  }
-],
-```
-
-To be pricise,
-
-```typescript
-type FormatterSetting = {
-    name: string;//This value will no be used, just for memo.
-    selector: vscode.DocumentSelector;//Document Selector, like {'language'='python'}
-    formatters: string[];//Array of formatter ids, like ['ms-python.python']
-};
-
-declare module 'vscode' {
-    export type DocumentSelector = DocumentFilter | string | Array<DocumentFilter | string>;
-    export interface DocumentFilter {
-        language?: string;//A language id, like `typescript`.
-        scheme?: string;//A Uri [scheme](#Uri.scheme), like `file` or `untitled`.
-        pattern?: GlobPattern;//A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder.
-    }
-}
-```
+- `composite-formatter.formatters`: `string[]`
+- `composite-formatter.language`: `string`
+- `composite-formatter.scheme`: `string`
+- `composite-formatter.pattern`: `string`
 
 It is not possible to provide more than one Composite Formatter for the same language. This is a VSCode specification.
 See Also: [Support multiple formatters for a single file · Issue \#142904 · microsoft/vscode](https://github.com/microsoft/vscode/issues/142904)
