@@ -33,7 +33,7 @@
       {
         "command": "composite-formatter.refresh",
         "category": "Composite Formatter",
-        "title": "Refresh Formatters"
+        "title": "Refresh Formatters Manually"
       }
     ],
     "configuration": [
@@ -46,7 +46,7 @@
               "typescript",
               "python"
             ],
-            "markdownDescription": "[Language id](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers), like `typescript`, `python`.",
+            "markdownDescription": "[Language id](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers), like `typescript`, `python`.`*`",
             "default": "*",
             "scope": "resource"
           },
