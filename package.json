@@ -2,7 +2,7 @@
   "name": "composite-formatter",
   "displayName": "Composite Formatter",
   "description": "Formatter that Runs Multiple Formatters.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icon": "image/icon.png",
   "engines": {
     "vscode": "^1.71.0"
