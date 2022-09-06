@@ -40,13 +40,26 @@
       {
         "title": "Composite Formatter",
         "properties": {
+          "composite-formatter.formatters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "markdownDescription": "An array of formatter ids, like `[\"ms-python.python\"]`.",
+            "examples": [
+              [
+                "ms-python.python"
+              ]
+            ],
+            "scope": "resource"
+          },
           "composite-formatter.language": {
             "type": "string",
             "examples": [
               "typescript",
               "python"
             ],
-            "markdownDescription": "[Language id](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers), like `typescript`, `python`.`*`",
+            "markdownDescription": "[Language id](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers), like `typescript`, `python`, `*`.",
             "default": "*",
             "scope": "resource"
           },
@@ -68,19 +81,6 @@
               "*.{ts,js}"
             ],
             "markdownDescription": "A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder, like `**​/*.{ts,js}` or `*.{ts,js}`.",
-            "scope": "resource"
-          },
-          "composite-formatter.formatters": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "markdownDescription": "An array of formatter ids, like `[\"ms-python.python\"]`",
-            "examples": [
-              [
-                "ms-python.python"
-              ]
-            ],
             "scope": "resource"
           }
         }

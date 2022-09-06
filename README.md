@@ -16,10 +16,10 @@ VSCode Formatter that Runs Multiple Formatters.
 
 This extension contributes the following settings:
 
-- `composite-formatter.formatters`: `string[]`
-- `composite-formatter.language`: `string`
-- `composite-formatter.scheme`: `string`
-- `composite-formatter.pattern`: `string`
+- `composite-formatter.formatters`: `string[]` An array of formatter ids, like `[\"ms-python.python\"]`.
+- `composite-formatter.language`: `string` [Language id](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers), like `typescript`, `python`, `*`.
+- `composite-formatter.scheme`: `string` Uri scheme, like `file`, `untitled`.
+- `composite-formatter.pattern`: `string` A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder, like `**​/*.{ts,js}` or `*.{ts,js}`.
 
 It is not possible to provide more than one Composite Formatter for the same language. This is a VSCode specification.
 See Also: [Support multiple formatters for a single file · Issue \#142904 · microsoft/vscode](https://github.com/microsoft/vscode/issues/142904)
