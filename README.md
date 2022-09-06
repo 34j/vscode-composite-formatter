@@ -21,7 +21,9 @@ This extension contributes the following settings:
 - `composite-formatter.scheme`: `string` Uri scheme, like `file`, `untitled`.
 - `composite-formatter.pattern`: `string` A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder, like `**​/*.{ts,js}` or `*.{ts,js}`.
 
-It is not possible to provide more than one Composite Formatter for the same language. This is a VSCode specification.
-See Also: [Support multiple formatters for a single file · Issue \#142904 · microsoft/vscode](https://github.com/microsoft/vscode/issues/142904)
+## Notes
+
+- It is not possible for a single extension to provide more than one Composite Formatter for the same language. This is a VSCode specification.
+- An request for this feature has moved to backlog. ([Support multiple formatters for a single file · Issue \#142904 · microsoft/vscode](https://github.com/microsoft/vscode/issues/142904))
 
 <!--https://coding.tools/regex-replace Replace \n with \n and " with \" -->
