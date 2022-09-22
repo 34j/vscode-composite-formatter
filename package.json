@@ -2,7 +2,7 @@
   "name": "composite-formatter",
   "displayName": "Composite Formatter",
   "description": "Formatter that Runs Multiple Formatters.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icon": "image/icon.png",
   "engines": {
     "vscode": "^1.71.0"
@@ -32,27 +32,55 @@
     "commands": [
       {
         "command": "composite-formatter.refresh",
-        "title": "Composite Formatter: Refresh Formatters"
+        "category": "Composite Formatter",
+        "title": "Refresh Formatters Manually"
       }
     ],
     "configuration": [
       {
         "title": "Composite Formatter",
         "properties": {
-          "composite-formatter.formatterSettings": {
+          "composite-formatter.formatters": {
             "type": "array",
-            "default": [
-              {
-                "name": "My Python Composite Formatter",
-                "selector": {
-                  "language": "python"
-                },
-                "formatters": [
-                  "ms-python.python"
-                ]
-              }
+            "items": {
+              "type": "string"
+            },
+            "markdownDescription": "An array of formatter ids, like `[\"ms-python.python\"]`.",
+            "examples": [
+              [
+                "ms-python.python"
+              ]
             ],
-            "markdownDescription": "Call `Composite Formatter: Refresh Formatters` from Command Palette after setting this value.\nExample:\n\n```json\n\"composite-formatter.formatterSettings\": [\n  {\n    \"name\": \"CompositeFormatter1\",\n    \"selector\": {\n        \"language\": \"python\"\n    },\n    \"formatters\": [\n        \"ms-python.python\"\n    ]\n  }\n],\n```\n\nTo be pricise,\n\n```typescript\ntype FormatterSetting = {\n    name: string;//This value will no be used, just for memo.\n    selector: vscode.DocumentSelector;//Document Selector, like {'language'='python'}\n    formatters: string[];//Array of formatter ids, like ['ms-python.python']\n};\n\ndeclare module 'vscode' {\n    export type DocumentSelector = DocumentFilter | string | Array<DocumentFilter | string>;\n    export interface DocumentFilter {\n        language?: string;//A language id, like `typescript`.\n        scheme?: string;//A Uri [scheme](#Uri.scheme), like `file` or `untitled`.\n        pattern?: GlobPattern;//A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder.\n    }\n}\n```",
+            "scope": "resource"
+          },
+          "composite-formatter.language": {
+            "type": "string",
+            "examples": [
+              "typescript",
+              "python"
+            ],
+            "markdownDescription": "[Language id](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers), like `typescript`, `python`, `*`.",
+            "default": "*",
+            "scope": "resource"
+          },
+          "composite-formatter.scheme": {
+            "type": "string",
+            "markdownDescription": "Uri scheme, like `file`, `untitled`.",
+            "examples": [
+              "file",
+              "untitled"
+            ],
+            "default": null,
+            "scope": "resource"
+          },
+          "composite-formatter.pattern": {
+            "type": "string",
+            "default": null,
+            "examples": [
+              "**​/*.{ts,js}",
+              "*.{ts,js}"
+            ],
+            "markdownDescription": "A glob pattern that is matched on the absolute path of the document. Use a relative pattern to filter documents to a workspace folder, like `**​/*.{ts,js}` or `*.{ts,js}`.",
             "scope": "resource"
           }
         }

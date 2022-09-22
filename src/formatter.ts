@@ -6,10 +6,13 @@ import * as vscode from 'vscode';
  * Settings for each composite formatter
  */
 type FormatterSetting = {
-    name: string;
     selector: vscode.DocumentSelector;
     formatters: string[];
 };
+
+function isNullOrWhitespace(str: string | undefined | null): boolean {
+    return !str || !str.trim();
+}
 
 export class CompositeFormatter {
     /**
@@ -26,35 +29,36 @@ export class CompositeFormatter {
         this.disposables = [];
 
         // Set all formatter settings.
-        for (const formatterSetting of await CompositeFormatter.getFormatterSettings()) {
-            // See: https://code.visualstudio.com/blogs/2016/11/15/formatters-best-practices
-            let disposable = vscode.languages.registerDocumentFormattingEditProvider(formatterSetting.selector, {
-                async provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
-                    await CompositeFormatter.runMultipleFormatters(formatterSetting.formatters);
-                    return [];
-                }
-            });
-            this.disposables.push(disposable);
-        }
-        
+        const config = vscode.workspace.getConfiguration('composite-formatter', vscode.window.activeTextEditor?.document.uri);
+        const formatterSetting: FormatterSetting = {
+            selector: {
+                language: CompositeFormatter.verifyString(config.get('language')),
+                scheme: CompositeFormatter.verifyString(config.get('scheme')),
+                pattern: CompositeFormatter.verifyString(config.get('pattern'))
+            },
+            formatters: config.get('formatters') ?? []
+        };
+        console.info('Refreshing Composite Formatter.');
+        console.log(formatterSetting);
+
+        let disposable = vscode.languages.registerDocumentFormattingEditProvider(formatterSetting.selector, {
+            async provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
+                //const config = vscode.workspace.getConfiguration('composite-formatter', vscode.window.activeTextEditor?.document.uri);
+                //await CompositeFormatter.runMultipleFormatters(config.get('formatters') ?? []);
+                await CompositeFormatter.runMultipleFormatters(formatterSetting.formatters);
+                return [];
+            }
+        });
+        this.disposables.push(disposable);
+
         return this.disposables.map(s => s);
     }
 
-    /**
-     * Get formatter settings.
-     * @returns Formatter settings.
-     */
-    private static async getFormatterSettings(): Promise<FormatterSetting[]> {
-        // Get Configuration
-        const config = vscode.workspace.getConfiguration('composite-formatter', vscode.window.activeTextEditor?.document);
-        const formatterSettings = config.get<FormatterSetting[]>('formatterSettings');
-
-        // If json could not be parsed, show error.
-        if (!formatterSettings) {
-            vscode.window.showErrorMessage('composite-formatter.formatterSettings could not be parsed. See the documentation: https://github.com/34j/vscode-composite-formatter and after configuring formatters run `Composite Formatter: Refresh Composite Formatter`.');
-            return [];
+    private static verifyString(str: string | undefined | null): string | undefined {
+        if (!str || !str.trim()) {
+            return undefined;
         }
-        return formatterSettings;
+        return str;
     }
 
     /**
@@ -63,12 +67,18 @@ export class CompositeFormatter {
     * @param verbose Show more information in the console. (very slight performance change)
     */
     private static async runMultipleFormatters(formatters: string[], verbose: boolean = false) {
+        if (!vscode.window.activeTextEditor){
+            return;
+        }
         const editorConfig = vscode.workspace.getConfiguration('editor', vscode.window.activeTextEditor?.document);
         const initialFormatter = await editorConfig.get('defaultFormatter');
         for (const formatter of formatters) {
-            await editorConfig.update('defaultFormatter', formatter, vscode.ConfigurationTarget.WorkspaceFolder);
+            // This won't work: await vscode.commands.executeCommand('editor.action.formatDocument.multiple', formatter)
+            // Just shows window.
+            // setting to vscode.ConfigurationTarget.WorkspaceFolder will not work.
+            await editorConfig.update('defaultFormatter', formatter, vscode.ConfigurationTarget.Workspace);
             if (verbose) {
-                const debugEditorConfig = vscode.workspace.getConfiguration('editor', vscode.window.activeTextEditor?.document);
+                const debugEditorConfig = vscode.workspace.getConfiguration('editor', vscode.window.activeTextEditor?.document.uri);
                 const configFormatter = await debugEditorConfig.get('defaultFormatter');
                 if (formatter !== configFormatter) {
                     console.error(`${formatter} != ${configFormatter} ERROR`);
@@ -79,6 +89,6 @@ export class CompositeFormatter {
             }
             await vscode.commands.executeCommand('editor.action.formatDocument');
         }
-        await editorConfig.update('defaultFormatter', initialFormatter, vscode.ConfigurationTarget.WorkspaceFolder);
+        await editorConfig.update('defaultFormatter', initialFormatter, vscode.ConfigurationTarget.Workspace);
     }
 }

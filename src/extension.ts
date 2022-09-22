@@ -27,6 +27,13 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	// Add to subscriptions
 	context.subscriptions.push(disposable);
+
+	// Automatically refresh
+	vscode.workspace.onDidChangeConfiguration(async e => {
+		if(e.affectsConfiguration('composite-formatter')){
+			await vscode.commands.executeCommand('composite-formatter.refresh');
+		}
+	});
 }
 
 // this method is called when your extension is deactivated
